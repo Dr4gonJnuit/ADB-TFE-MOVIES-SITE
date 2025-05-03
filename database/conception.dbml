@@ -1,0 +1,68 @@
+Project ADB_TFE_MOVIES_SITE {
+  database_type: "MySQL"
+  Note: "Travail de fin d'année pour la 1ère année d\'étude à l'IFAPME à Charleroi pour le cours d\'atelier de développement - base."
+}
+
+Table Users {
+  u_id int [pk, increment]
+  username varchar(50) [not null, unique]
+  email varchar(100) [not null, unique]
+  first_name varchar(50)
+  last_name varchar(50)
+  gender enum('Homme', 'Femme', 'Autre') [default: 'Autre']
+  birthdate date [note: "Date de naissance au format YYYY-MM-DD"]
+  country varchar(50) [note: "Pays d'origine de l'utilisateur"]
+
+  // password int [not null, note: "Le mot de passe est haché."]
+
+  created_at datetime [not null, default: `CURRENT_TIMESTAMP`]
+}
+
+Table Mots_de_passe {
+  id int [pk, increment]
+  user_id int [not null, ref: - Users.u_id]
+  password varchar(255) [not null]
+
+  Note: "Cette table contient les mots de passe hachés des utilisateurs."
+}
+
+Table Movies {
+  m_id int [pk, increment]
+
+  Note: "Cette table contient les identifiants des films/séries présents dans l'API utilisée."
+}
+
+Table Statistiques {
+  id int [pk, increment]
+  user_id int [not null, ref: > Users.u_id]
+  nbr_favorites int [not null, default: 0]
+
+  Note: "Cette table peut être utilisée pour réduire le nombre de requêtes vers la base de données car elle contient la quantité des informations sur les actions de l'utilisateur comme par exemple le nombre de films ajoutés dans les favoris."
+}
+
+Table Favorites {
+  f_id int [pk, increment]
+  user_id int [not null, ref: > Users.u_id]
+  movie_id int [not null, ref: > Movies.m_id]
+
+  indexes {
+    (user_id, movie_id) [unique]
+  }
+
+}
+
+Table Comments {
+  c_id int [pk, increment]
+  user_id int [not null, ref: > Users.u_id]
+  movie_id int [not null, ref: > Movies.m_id]
+  comment text [not null]
+  created_at datetime [not null, default: `CURRENT_TIMESTAMP`, note: "Date de création du commentaire au format YYYY-MM-DD HH:MM:SS"]
+  updated_at datetime [default: null, note: "Date de mise à jour du commentaire au format YYYY-MM-DD HH:MM:SS"]
+  deleted_at datetime [default: null, note: "Date de suppression du commentaire au format YYYY-MM-DD HH:MM:SS"]
+
+  indexes {
+    (user_id, movie_id) [unique]
+  }
+
+  Note: "Un utilisateur peut commenter plusieurs films différents, mais un film ne peut être commenté qu'une seule fois par utilisateur. Par contre, il peut modifier et supprimer son commentaire à tout moment."
+}
