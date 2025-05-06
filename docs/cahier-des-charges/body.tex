@@ -1,0 +1,31 @@
+\documentclass[a4paper]{article}
+
+%%%%%%%%%%%%
+% Packages %
+%%%%%%%%%%%%
+% \usepackage{babel}
+\usepackage{graphicx}
+\usepackage{rotating}
+
+% Base path for images
+\graphicspath{{images/}}
+
+\begin{document}
+\include{title}
+\tableofcontents
+
+\pagebreak
+
+\section{English Version}
+\input{en}
+
+\section{Version Française}
+\input{fr}
+
+\pagebreak
+
+\section{UI Mockups}
+
+\include{wireframes}
+
+\end{document}
