@@ -1,5 +1,5 @@
 \subsection{Aperçu du Projet}
-Le projet vise à développer une application web permettant aux utilisateurs de suivre les films et séries qu'ils regardent via une interface simple, centralisée et conviviale. L'idée vient de "Seb", un passionné de séries qui souhaite mieux gérer les épisodes qu'il a vus, savoir sur quelle plateforme chaque série est disponible, et annoter des notes personnelles tout en suivant sa progression.
+Le projet vise à développer une application web permettant aux utilisateurs de suivre les séries qu'ils regardent via une interface simple, centralisée et conviviale. L'idée vient de "Seb", un passionné de séries qui souhaite mieux gérer les épisodes qu'il a vus, savoir sur quelle plateforme chaque série est disponible, et annoter des notes personnelles tout en suivant sa progression.
 
 \subsection{Objectifs du Projet}
 \begin{itemize}
@@ -14,10 +14,10 @@ Le projet vise à développer une application web permettant aux utilisateurs de
 
 \subsubsection{Gestion des Films/Séries}
 \begin{itemize}
-    \item Ajouter un film/une série à la liste de l'utilisateur.
-    \item Voir les détails d'un film/d'une série (titre, synopsis, plateformes).
-    \item Marquer les épisodes vus pour la série (par exemple, "jusqu'à l'épisode 5").
-    \item Archiver les films/séries terminées ou mises en pause.
+    \item Ajouter une série à la liste de l'utilisateur.
+    \item Voir les détails d'une série (titre, synopsis, plateformes).
+    \item Marquer les épisodes vus pour la série en cochant une case.
+    \item Archiver les séries terminées ou mises en pause.
     \item Ajouter aux favoris (icône cœur).
 \end{itemize}
 
@@ -25,6 +25,14 @@ Le projet vise à développer une application web permettant aux utilisateurs de
 \begin{itemize}
     \item Afficher les plateformes de streaming disponibles (par exemple, Netflix, Prime Video).
     \item Optionnel : lien vers la plateforme.
+\end{itemize}
+
+\subsubsection{Comptes Utilisateurs}
+\begin{itemize}
+    \item Permettre aux utilisateurs de créer un compte pour sauvegarder leur progression et leurs préférences.
+    \item Optionnel : Connexion sociale (par exemple, Google, Facebook).
+    \item Stockage sécurisé des mots de passe et gestion des comptes.
+    \item Fonctionnalités basées sur le compte : synchronisation entre appareils, recommandations personnalisées.
 \end{itemize}
 
 \subsubsection{Journal Personnel}
@@ -43,15 +51,8 @@ Le projet vise à développer une application web permettant aux utilisateurs de
 \begin{itemize}
     \item Utilisateurs réguliers de plateformes de streaming.
     \item Personnes souhaitant un moyen simple d'organiser leur historique de visionnage.
+    \item Personnes cherchant à consulter une information simple sur une série.
     \item Utilisateurs non technophiles : l'interface doit être très intuitive.
-\end{itemize}
-
-\subsection{Comptes Utilisateurs}
-\begin{itemize}
-    \item Permettre aux utilisateurs de créer un compte pour sauvegarder leur progression et leurs préférences.
-    \item Optionnel : Connexion sociale (par exemple, Google, Facebook).
-    \item Stockage sécurisé des mots de passe et gestion des comptes.
-    \item Fonctionnalités basées sur le compte : synchronisation entre appareils, recommandations personnalisées.
 \end{itemize}
 
 \subsection{Contraintes Techniques}
@@ -74,10 +75,12 @@ Le projet vise à développer une application web permettant aux utilisateurs de
 
 \subsection{Fonctionnalités Futures Possibles}
 \begin{itemize}
+    \item Gestion des films en plus des séries.
     \item Moteur de recommandations basé sur les favoris.
-    \item Partage de progression avec des amis.
-    \item Notifications pour les nouveaux épisodes.
+    \item Partage de progression avec des amis (si autorisé).
+    \item Notifications pour les nouveaux épisodes (si autorisé).
     \item Synchronisation API avec les services de streaming (si autorisé).
+    \item Application mobile.
 \end{itemize}
 
 \subsection{Ressources et Chronogramme}
@@ -91,8 +94,7 @@ Le projet vise à développer une application web permettant aux utilisateurs de
 
 \subsection{Livrables}
 \begin{itemize}
-    \item Une application fonctionnelle avec toutes les fonctionnalités clés.
-    \item Documentation technique et utilisateur.
-    \item Maquettes UI (par exemple, avec drawio).
-    \item Rapport final du projet.
+    \item Pour le 07/05/2025 : ce document avec les maquettes UI.
+    \item Pour le 16/05/2025 : une base de données fonctionnelle.
+    \item Pour le 10/06/2025 : un prototype fonctionnel avec les principales fonctionnalités.
 \end{itemize}
