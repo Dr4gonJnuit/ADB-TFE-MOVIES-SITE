@@ -3,14 +3,60 @@ Project ADB_TFE_SERIES_SITE {
   Note: "Travail de fin d'année pour la 1ère année d\'étude à l'IFAPME à Charleroi pour le cours d\'atelier de développement - base."
 }
 
-Table Series {
-  id int(10) [pk]
+// Ces tables se remplissent dès que l'utilisateur fait une recherche d'une série pas encore dans la base de données.
+// On fait d'abord une recherche dans la DB pour afficher les infos,
+// si rien n'est présent on demande à l'API de montrer les infos de la série et puis on les stocke dans la DB.
 
-  Note: "Cette table ne sert que comme représentation de l'API utilisée. Elle ne n'existe pas car elle est gérée par l'API."
+Table Series {
+  serie_id int(10) [pk]
+  title varchar(255) [not null, note: "Titre de la série"]
+  description text [not null, note: "Description de la série"]
+  image varchar(255) [not null, note: "URL de l'image de la série"]
 }
 
+Table Seasons {
+  id int(10) [pk, increment]
+  serie_id int(10) [not null, ref: > Series.serie_id]
+  season_number int(10) [not null, note: "Numéro de la saison"]
+  title varchar(255) [not null, note: "Titre de la saison"]
+  description text [not null, note: "Description de la saison"]
+  image varchar(255) [not null, note: "URL de l'image de la saison"]
+}
+
+Table Episodes {
+  id int(10) [pk, increment]
+  season_id int(10) [not null, ref: > Seasons.id]
+  episode_number int(10) [not null, note: "Numéro de l'épisode"]
+  title varchar(255) [not null, note: "Titre de l'épisode"]
+  description text [not null, note: "Description de l'épisode"]
+  image varchar(255) [not null, note: "URL de l'image de l'épisode"]
+}
+
+Table Genders {
+  gender_id int(10) [pk]
+  name varchar(255) [not null, note: "Nom du genre"]
+}
+
+Table SeriesGenders {
+  serie_id int(10) [not null, ref: > Series.serie_id]
+  gender_id int(10) [not null, ref: > Genders.gender_id]
+}
+
+Table Actors {
+  actor_id int(10) [pk]
+  name varchar(255) [not null, note: "Nom de l'acteur"]
+  image varchar(255) [not null, note: "URL de l'image de l'acteur"]
+}
+
+Table SeriesActors {
+  serie_id int(10) [not null, ref: > Series.serie_id]
+  actor_id int(10) [not null, ref: > Actors.actor_id]
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+
 Table Users {
-  id bigint(20) [pk, increment, note: "unsigned"]
+  user_id bigint(20) [pk, increment, note: "unsigned"]
   name varchar(255) [not null, note: "Nom d'utilisateur"]
   first_name varchar(255) [default: null, note: "Prénom de l'utilisateur"]
   last_name varchar(255) [default: null, note: "Nom de famille de l'utilisateur"]
@@ -27,8 +73,8 @@ Table Users {
 
 Table Comments {
   id bigint(20) [pk, increment, note: "unsigned"]
-  user_id bigint(20) [not null, ref: > Users.id, note: "unsigned"]
-  serie_id int(10) [not null, ref: > Series.id]
+  user_id bigint(20) [not null, ref: > Users.user_id, note: "unsigned"]
+  serie_id int(10) [not null, ref: > Series.serie_id]
   comment text [not null]
   created_at timestamp [not null, default: `CURRENT_TIMESTAMP`]
   updated_at timestamp [default: null]
@@ -42,90 +88,54 @@ Table Comments {
 
 Table Statistiques {
   id int(10) [pk, increment]
-  user_id bigint(20) [not null, ref: > Users.id, note: "unsigned"]
+  user_id bigint(20) [not null, ref: > Users.user_id, note: "unsigned"]
 }
 
-// Version Combinée des tables Favorites, Watchlist, Watched et Ratings
-// Demander au prof si c'est une bonne idée de faire ça ou pas
-Table User_Serie_Interactions {
+Table Favorites {
+  user_id bigint(20) [pk, not null, ref: > Users.user_id, note: "unsigned"]
+  serie_id int(10) [pk, not null, ref: > Series.serie_id]
+
+  created_at timestamp [not null, default: `CURRENT_TIMESTAMP`]
+  deleted_at timestamp [default: null]
+}
+
+Table WatchList {
+  user_id bigint(20) [pk, not null, ref: > Users.user_id, note: "unsigned"]
+  serie_id int(10) [pk, not null, ref: > Series.serie_id]
+
+  created_at timestamp [not null, default: `CURRENT_TIMESTAMP`]
+  deleted_at timestamp [default: null]
+}
+
+Table Watched {
   id int(10) [pk, increment]
-  user_id bigint(20) [not null, ref: > Users.id, note: "unsigned"]
-  serie_id int(10) [not null, ref: > Series.id]
-  is_favorite boolean [default: false]
-  in_watchlist boolean [default: false]
-  is_watched boolean [default: false]
-  rating int(11) [default: null]
+  user_id bigint(20) [not null, ref: > Users.user_id, note: "unsigned"]
+  episode_id int(10) [not null, ref: > Episodes.id]
+
+  created_at timestamp [not null, default: `CURRENT_TIMESTAMP`]
+  deleted_at timestamp [default: null]
+}
+
+Table Ratings {
+  user_id bigint(20) [pk, not null, ref: > Users.user_id, note: "unsigned"]
+  serie_id int(10) [pk, not null, ref: > Series.serie_id]
+  rating int(11) [not null]
+
   created_at timestamp [not null, default: `CURRENT_TIMESTAMP`]
   updated_at timestamp [default: null]
   deleted_at timestamp [default: null]
-
-  indexes {
-    (user_id, serie_id) [unique]
-  }
 }
-
-// Table Favorites {
-//   id int(10) [pk, increment]
-//   user_id bigint(20) [not null, ref: > Users.id, note: "unsigned"]
-//   serie_id int(10) [not null, ref: > Series.id]
-//   created_at timestamp [not null, default: `CURRENT_TIMESTAMP`]
-//   deleted_at timestamp [default: null]
-
-//   indexes {
-//     (user_id, serie_id) [unique]
-//   }
-
-// }
-
-// Table Watchlist {
-//   id int(10) [pk, increment]
-//   user_id bigint(20) [not null, ref: > Users.id, note: "unsigned"]
-//   serie_id int(10) [not null, ref: > Series.id]
-//   created_at timestamp [not null, default: `CURRENT_TIMESTAMP`]
-//   deleted_at timestamp [default: null]
-
-//   indexes {
-//     (user_id, serie_id) [unique]
-//   }
-
-// }
-
-// Table Watched {
-//   id int(10) [pk, increment]
-//   user_id bigint(20) [not null, ref: > Users.id, note: "unsigned"]
-//   serie_id int(10) [not null, ref: > Series.id]
-//   created_at timestamp [not null, default: `CURRENT_TIMESTAMP`]
-//   deleted_at timestamp [default: null]
-
-//   indexes {
-//     (user_id, serie_id) [unique]
-//   }
-
-// }
-
-// Table Ratings {
-//   id int(10) [pk, increment]
-//   user_id bigint(20) [not null, ref: > Users.id, note: "unsigned"]
-//   serie_id int(10) [not null, ref: > Series.id]
-//   rating int(11) [not null]
-//   created_at timestamp [not null, default: `CURRENT_TIMESTAMP`]
-//   updated_at timestamp [default: null]
-//   deleted_at timestamp [default: null]
-
-//   indexes {
-//     (user_id, serie_id) [unique]
-//   }
-
-// }
 
 Table Sessions {
   id varchar(255) [pk]
-  user_id bigint(20) [default: null, ref: > Users.id, note: "unsigned"]
+  user_id bigint(20) [default: null, ref: > Users.user_id, note: "unsigned"]
   ip_address varchar(45) [default: null]
   user_agent text [default: null]
   payload longtext [not null]
   last_activity int(11) [not null]
 }
+
+// Tables used for Laravel
 
 Table Password_Reset_Tokens {
   email varchar(255) [pk]
