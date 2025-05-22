@@ -7,6 +7,10 @@ Project ADB_TFE_SERIES_SITE {
 // On fait d'abord une recherche dans la DB pour afficher les infos,
 // si rien n'est présent on demande à l'API de montrer les infos de la série et puis on les stocke dans la DB.
 
+// Ces tables se remplissent dès que l'utilisateur fait une recherche d'une série pas encore dans la base de données.
+// On fait d'abord une recherche dans la DB pour afficher les infos,
+// si rien n'est présent on demande à l'API de montrer les infos de la série et puis on les stocke dans la DB.
+
 Table Series {
   serie_id int(10) [pk]
   title varchar(255) [not null, note: "Titre de la série"]
@@ -45,6 +49,52 @@ Table Actors {
   actor_id int(10) [pk]
   name varchar(255) [not null, note: "Nom de l'acteur"]
   image varchar(255) [note: "URL de l'image de l'acteur, a besoin de la base de l'URL de l'API pour fct"]
+}
+
+Table SeriesActors {
+  serie_id int(10) [not null, ref: > Series.serie_id]
+  actor_id int(10) [not null, ref: > Actors.actor_id]
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+  serie_id int(10) [pk]
+  title varchar(255) [not null, note: "Titre de la série"]
+  description text [not null, note: "Description de la série"]
+  image varchar(255) [not null, note: "URL de l'image de la série"]
+}
+
+Table Seasons {
+  id int(10) [pk, increment]
+  serie_id int(10) [not null, ref: > Series.serie_id]
+  season_number int(10) [not null, note: "Numéro de la saison"]
+  title varchar(255) [not null, note: "Titre de la saison"]
+  description text [not null, note: "Description de la saison"]
+  image varchar(255) [not null, note: "URL de l'image de la saison"]
+}
+
+Table Episodes {
+  id int(10) [pk, increment]
+  season_id int(10) [not null, ref: > Seasons.id]
+  episode_number int(10) [not null, note: "Numéro de l'épisode"]
+  title varchar(255) [not null, note: "Titre de l'épisode"]
+  description text [not null, note: "Description de l'épisode"]
+  image varchar(255) [not null, note: "URL de l'image de l'épisode"]
+}
+
+Table Genders {
+  gender_id int(10) [pk]
+  name varchar(255) [not null, note: "Nom du genre"]
+}
+
+Table SeriesGenders {
+  serie_id int(10) [not null, ref: > Series.serie_id]
+  gender_id int(10) [not null, ref: > Genders.gender_id]
+}
+
+Table Actors {
+  actor_id int(10) [pk]
+  name varchar(255) [not null, note: "Nom de l'acteur"]
+  image varchar(255) [not null, note: "URL de l'image de l'acteur"]
 }
 
 Table SeriesActors {
