@@ -1,0 +1,305 @@
+Project ADB_TFE_SERIES_SITE {
+  database_type: "MySQL"
+  Note: "End-of-year project for the first year of study at IFAPME in Charleroi for the development workshop - basics course."
+}
+
+Enum "Users_gender_enum" {
+  "Homme"
+  "Femme"
+  "Autre"
+}
+
+Table "Series" {
+  "serie_id" int(32) [pk]
+  "title" VARCHAR(255) [not null]
+  "status" VARCHAR(255)
+  "nbr_of_seasons" int(32)
+  "nbr_of_episodes" int(32)
+  "release_date" DATE
+  "description" TEXT
+  "image_url" VARCHAR(255)
+  "homepage" VARCHAR(255)
+}
+
+Table "Seasons" {
+  "season_id" int(32) [pk]
+  "serie_id" int(32) [not null]
+  "season_number" int(32)
+  "description" TEXT
+  "image_url" VARCHAR(255)
+}
+
+Table "Episodes" {
+  "episode_id" int(32) [pk]
+  "season_id" int(32) [not null]
+  "episode_number" int(32)
+  "title" VARCHAR(255)
+  "description" TEXT
+  "image_url" VARCHAR(255)
+}
+
+Table "Genres" {
+  "genre_id" int(32) [pk]
+  "name" VARCHAR(255) [not null]
+}
+
+Table "Series_Genres" {
+  "serie_id" int(32) [not null]
+  "genre_id" int(32) [not null]
+
+  Indexes {
+    (serie_id, genre_id) [pk]
+  }
+
+}
+
+Table "Actors" {
+  "actor_id" int(32) [pk]
+  "name" VARCHAR(255) [not null]
+  "image_url" VARCHAR(255)
+}
+
+Table "Serie_Cast" {
+  "serie_id" int(32) [not null]
+  "actor_id" int(32) [not null]
+  "character_name" VARCHAR(255)
+
+  Indexes {
+    (serie_id, actor_id) [pk]
+  }
+
+}
+
+Table "Episodes_Cast" {
+  "episode_id" int(32) [not null]
+  "actor_id" int(32) [not null]
+
+  Indexes {
+    (episode_id, actor_id) [pk]
+  }
+
+}
+
+Table "Production_Companies" {
+  "id" int(32) [pk]
+  "name" VARCHAR(255) [not null]
+  "logo_path" VARCHAR(255)
+  "origin_country" VARCHAR(255)
+}
+
+Table "Series_Production_Companies" {
+  "serie_id" int(32) [not null]
+  "company_id" int(32) [not null]
+
+  Indexes {
+    (serie_id, company_id) [pk]
+  }
+
+}
+
+Table "Users" {
+  "user_id" bigint(20) [pk, increment]
+  "name" varchar(255) [not null]
+  "first_name" varchar(255) [default: NULL]
+  "last_name" varchar(255) [default: NULL]
+  "gender" Users_gender_enum [default: NULL]
+  "birthdate" DATE
+  "country" varchar(50)
+  "email" varchar(255) [unique, not null]
+  "email_verified_at" TIMESTAMP [default: NULL]
+  "password" varchar(255) [not null]
+  "remember_token" varchar(100) [default: NULL]
+  "created_at" TIMESTAMP [not null, default: `CURRENT_TIMESTAMP`]
+  "updated_at" TIMESTAMP [default: NULL]
+}
+
+Table "Comments" {
+  "id" bigint(20) [pk, increment]
+  "user_id" bigint(20) [not null]
+  "serie_id" int(10) [not null]
+  "comment" text [not null]
+  "created_at" TIMESTAMP [not null, default: `CURRENT_TIMESTAMP`]
+  "updated_at" TIMESTAMP [default: NULL]
+  "deleted_at" TIMESTAMP [default: NULL]
+
+  Indexes {
+    (user_id, serie_id) [unique, name: "Comments_index_0"]
+  }
+
+}
+
+Table "Statistiques" {
+  "id" int(10) [pk, increment]
+  "user_id" bigint(20) [not null]
+  "nbr_of_favorites" int(10) [not null, default: 0]
+  "nbr_of_watchlist" int(10) [not null, default: 0]
+  "nbr_of_watched" int(10) [not null, default: 0]
+  "nbr_of_comments" int(10) [not null, default: 0]
+  "nbr_of_ratings" int(10) [not null, default: 0]
+}
+
+Table "Favorites" {
+  "user_id" bigint(20) [not null]
+  "serie_id" int(10) [not null]
+  "created_at" TIMESTAMP [not null, default: `CURRENT_TIMESTAMP`]
+  "deleted_at" TIMESTAMP [default: NULL]
+
+  Indexes {
+    (user_id, serie_id) [pk]
+  }
+
+}
+
+Table "WatchList" {
+  "user_id" bigint(20) [not null]
+  "serie_id" int(10) [not null]
+  "created_at" TIMESTAMP [not null, default: `CURRENT_TIMESTAMP`]
+  "deleted_at" TIMESTAMP [default: NULL]
+
+  Indexes {
+    (user_id, serie_id) [pk]
+  }
+
+}
+
+Table "Watched" {
+  "id" int(10) [pk, increment]
+  "user_id" bigint(20) [not null]
+  "episode_id" int(10) [not null]
+  "created_at" TIMESTAMP [not null, default: `CURRENT_TIMESTAMP`]
+  "deleted_at" TIMESTAMP [default: NULL]
+}
+
+Table "Ratings" {
+  "user_id" bigint(20) [not null]
+  "serie_id" int(10) [not null]
+  "rating" int(11) [not null]
+  "created_at" TIMESTAMP [not null, default: `CURRENT_TIMESTAMP`]
+  "updated_at" TIMESTAMP [default: NULL]
+  "deleted_at" TIMESTAMP [default: NULL]
+
+  Indexes {
+    (user_id, serie_id) [pk]
+  }
+
+}
+
+Table "Sessions" {
+  "id" varchar(255) [pk]
+  "user_id" bigint(20) [default: NULL]
+  "ip_address" varchar(45) [default: NULL]
+  "user_agent" text [default: NULL]
+  "payload" longtext [not null]
+  "last_activity" int(11) [not null]
+}
+
+// The following tables are used for Laravel's built-in features
+// such as password resets, migrations, jobs, and cache.
+// These tables are not directly related to the website functionality.
+
+Table "Password_Reset_Tokens" {
+  "email" varchar(255) [pk]
+  "token" varchar(255) [not null]
+  "created_at" TIMESTAMP [default: NULL]
+}
+
+Table "Migrations" {
+  "id" int(10) [pk, increment]
+  "migration" varchar(255) [not null]
+  "batch" int(11) [not null]
+}
+
+Table "Jobs" {
+  "id" bigint(20) [pk, increment]
+  "queue" varchar(255) [not null]
+  "payload" longtext [not null]
+  "attempts" tinyint(3) [not null]
+  "reserved_at" int(10) [default: NULL]
+  "available_at" int(10) [not null]
+  "created_at" int(10) [not null]
+}
+
+Table "Jobs_Batches" {
+  "id" varchar(255) [pk]
+  "name" varchar(255) [not null]
+  "total_jobs" int(11) [not null]
+  "pending_jobs" int(11) [not null]
+  "failed_jobs" int(11) [not null]
+  "failed_jobs_ids" longtext [not null]
+  "options" mediumtext [default: NULL]
+  "canceled_at" int(11) [default: NULL]
+  "created_at" int(11) [not null]
+  "finished_at" int(11) [default: NULL]
+}
+
+Table "Failed_Jobs" {
+  "id" bigint(20) [pk, increment]
+  "uuid" varchar(255) [unique, not null]
+  "connection" text [not null]
+  "queue" text [not null]
+  "payload" longtext [not null]
+  "exception" longtext [not null]
+  "failed_at" TIMESTAMP [default: `CURRENT_TIMESTAMP`]
+}
+
+Table "Cache_Locks" {
+  "key" varchar(255) [pk]
+  "owner" varchar(255) [not null]
+  "expiration" int(11) [not null]
+}
+
+Table "Cache" {
+  "key" varchar(255) [pk]
+  "value" mediumtext [not null]
+  "expiration" int(11) [not null]
+}
+
+// Relationships Section
+
+// A series can have multiple seasons but a season belongs to only one series
+Ref:"Series"."serie_id" < "Seasons"."serie_id"
+
+// A season can have multiple episodes but an episode belongs to only one season
+Ref:"Seasons"."season_id" < "Episodes"."season_id"
+
+// A series can have multiple genres
+Ref:"Series"."serie_id" < "Series_Genres"."serie_id"
+Ref:"Genres"."genre_id" < "Series_Genres"."genre_id"
+
+// A series can have multiple actors and an actor can play in multiple series
+Ref:"Series"."serie_id" < "Serie_Cast"."serie_id"
+Ref:"Actors"."actor_id" < "Serie_Cast"."actor_id"
+
+// An episode can have multiple actors and an actor can play in multiple episodes
+Ref:"Episodes"."episode_id" < "Episodes_Cast"."episode_id"
+Ref:"Actors"."actor_id" < "Episodes_Cast"."actor_id"
+
+// A series can have multiple production companies
+Ref:"Series"."serie_id" < "Series_Production_Companies"."serie_id"
+Ref:"Production_Companies"."id" < "Series_Production_Companies"."company_id"
+
+// A user can have multiple comments on different series
+Ref:"Users"."user_id" < "Comments"."user_id"
+Ref:"Series"."serie_id" < "Comments"."serie_id"
+
+// A user can have only one statistics record but a statistics record can change over time
+Ref:"Users"."user_id" - "Statistiques"."user_id"
+
+// A user can have multiple series in favorites
+Ref:"Users"."user_id" < "Favorites"."user_id"
+Ref:"Series"."serie_id" < "Favorites"."serie_id"
+
+// A user can have multiple series in their watchlist
+Ref:"Users"."user_id" < "WatchList"."user_id"
+Ref:"Series"."serie_id" < "WatchList"."serie_id"
+
+// A user can have multiple episodes beeing watched
+Ref:"Users"."user_id" < "Watched"."user_id"
+Ref:"Episodes"."episode_id" < "Watched"."episode_id"
+
+// A user can have multiple ratings of different series
+Ref:"Users"."user_id" < "Ratings"."user_id"
+Ref:"Series"."serie_id" < "Ratings"."serie_id"
+
+// A user can have multiple sessions if he connects from different devices
+Ref:"Users"."user_id" < "Sessions"."user_id"

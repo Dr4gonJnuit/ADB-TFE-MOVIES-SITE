@@ -1,0 +1,46 @@
+| Dossier                                  | À quoi il sert (concrètement)                                                                    | Tu l'utilises souvent ?  |
+| ---------------------------------------- | ------------------------------------------------------------------------------------------------ | ------------------------ |
+| `routes/web.php`                         | Définir les routes du site web, ex: `/home`, `/login`, `/dashboard`                              | ✅ Oui, tout le temps     |
+| `app/Http/Controllers/`                  | Contient tes **contrôleurs** → la logique derrière chaque page ou action                         | ✅ Oui, très souvent      |
+| `resources/views/`                       | Contient tes **pages HTML (Blade)** que tu affiches → comme des composants Angular               | ✅ Oui, très souvent      |
+| `app/Models/`                            | Définit tes **modèles Eloquent** → les objets qui représentent tes tables de BDD                 | ✅ Oui                    |
+| `app/Http/Middleware/`                   | Logique avant/après les requêtes → ex: vérification de login, redirections, etc.                 | ⚠️ Utile + tard          |
+| `public/`                                | Contient les fichiers accessibles directement depuis le navigateur (ex: images, JS compilé, CSS) | ✅ Oui (surtout vite)     |
+| `resources/js/` ou `resources/js/react/` | Ton code React s'il est activé avec Inertia ou Vite (à la place ou en plus de Blade)             | ✅ Si tu fais du React    |
+| `resources/css/`                         | Ton CSS (souvent Tailwind)                                                                       | ✅ Si tu fais du frontend |
+| `.env`                                   | Configuration locale → base de données, URL, clé secrète, etc.                                   | ✅ Oui                    |
+
+| Dossier               | Sert à quoi ?                            | Tu peux ignorer au début |
+| --------------------- | ---------------------------------------- | ------------------------ |
+| `database/factories/` | Générer de fausses données               | ✅ Oui                    |
+| `database/seeders/`   | Remplir la base avec des données de test | ✅ Oui                    |
+| `storage/`            | Logs, fichiers temporaires               | ✅ Laravel s'en occupe    |
+| `bootstrap/`          | Initialisation de l'app                  | ✅ Oui                    |
+| `tests/`              | Tes tests unitaires                      | ⚠️ Oui, sauf si TDD      |
+| `vendor/`             | Les dépendances                          | ⚠️ Jamais à toucher      |
+
+- Vue (HTML) → resources/views/
+- Route     → routes/web.php
+- Logique   → app/Http/Controllers/
+- Données   → app/Models/
+
+resources/
+│
+├── js/
+│   ├── Pages/        ← ✅ Pages React, comme tes composants Angular
+│   ├── Layouts/      ← (optionnel) Layouts communs (header, footer, etc.)
+│   ├── App.jsx       ← Point d'entrée principal de ton app React
+│   └── bootstrap.js  ← Script de démarrage (inclut Inertia)
+│
+├── views/
+│   └── app.blade.php ← ✅ Fichier Blade unique qui monte React (comme index.html dans Angular)
+
+| Objet           | Commande Artisan              | Exemple                                         |
+| --------------- | ----------------------------- | ----------------------------------------------- |
+| Contrôleur      | `php artisan make:controller` | `php artisan make:controller UserController`    |
+| Modèle          | `php artisan make:model`      | `php artisan make:model User`                   |
+| Migration       | `php artisan make:migration`  | `php artisan make:migration create_users_table` |
+| Seeder          | `php artisan make:seeder`     | `php artisan make:seeder UserSeeder`            |
+| Factory         | `php artisan make:factory`    | `php artisan make:factory UserFactory`          |
+| Resource (API)  | `php artisan make:resource`   | `php artisan make:resource UserResource`        |
+| Policy (droits) | `php artisan make:policy`     | `php artisan make:policy UserPolicy`            |
